@@ -73,7 +73,7 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      # Docker image here that supports AWS CLI
+      - image: circleci/awscli:latest
     steps:
       # Checkout code from git
       - run:
@@ -108,6 +108,7 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
+      - image: cicrcle/node:alpine
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
@@ -128,6 +129,7 @@ jobs:
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
+      - image: cicrcle/node:alpine
     steps:
       # Checkout code from git
       - run:
@@ -149,6 +151,7 @@ jobs:
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
+      - image: cicrcle/node:alpine
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
@@ -166,6 +169,8 @@ jobs:
   smoke-test:
     docker:
       # Lightweight Docker image 
+      
+      - image: cicrcle/node:alpine
     steps:
       # Checkout code from git
       - run:
@@ -189,6 +194,7 @@ jobs:
   cloudfront-update:
     docker:
       # Docker image here that supports AWS CLI
+      - image: cicrcle/node:alpine
     steps:
       # Checkout code from git
       - run:
@@ -204,6 +210,7 @@ jobs:
 cleanup:
     docker:
       # Docker image here
+      - image: cicrcle/node:alpine
     steps:
       # Checkout code from git
       - run:
