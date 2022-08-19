@@ -260,3 +260,4 @@ workflows:
       - build-frontend
       - build-backend
       - scan-frontend
+      - scan-backend
