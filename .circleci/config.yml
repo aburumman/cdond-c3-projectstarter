@@ -50,6 +50,17 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
 
+  scan-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+        name: scan frontend
+        command: |
+          cd frontend
+          npm install
+          npm audit --audit-level=critical
   build-backend:
     docker:
       - image: circleci/node:13.8.0
