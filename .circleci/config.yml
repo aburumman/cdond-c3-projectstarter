@@ -100,6 +100,14 @@ jobs:
             
 
 
+  install_tar_gzip:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - checkout
+      - run:
+                name: install tar and gzip
+                command: yum install tar gzip
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli:latest
@@ -276,4 +284,5 @@ workflows:
       - build-backend
       - scan-frontend
       - scan-backend
+      - install_tar_gzip
       - deploy-infrastructure
