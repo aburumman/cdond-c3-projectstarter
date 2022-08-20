@@ -101,14 +101,21 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: circleci/awscli:latest
+      - image: amazon/aws-cli:latest
     steps:
       # Checkout code from git
+      - checkout
+      - run:
+                name: Install tar and gzip
+                command: apt-get install tar gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
+              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
+              --tags project=udapeople
               #--tags project=your-tag \
               # --stack-name "your back-end stack name with workflow id" \
               # --parameter-overrides ID="your workflow id"  
@@ -142,7 +149,7 @@ jobs:
       # Add ssh keys with fingerprint
       # attach workspace
       - run:
-          name: Inst tall dependencies
+          name: Install dependencies
           command: |
             # Your code here
             exit 1
@@ -173,6 +180,11 @@ jobs:
       - run:
           name: Deploy frontend objects
           command: |
+            aws cloudformation deploy \
+            --template-file .circleci/files/frontend.yml \
+            --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"      \
+            --tags project=udapeople
             # your code here
       # Here's where you will add some code to rollback on failure      
                     
