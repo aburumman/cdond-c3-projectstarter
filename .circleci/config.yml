@@ -140,8 +140,10 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
+            backend_instance_ip=$(aws --profile mustapha_udacity ec2 describe-instances --filters "Name=instance-state-name,Values=running" --output=json | jq -r '.Reservations[0].Instances[].NetworkInterfaces[].Association.PublicIp')
+            echo $backend_instance_ip >> inventory.txt
             # Your code here
-            exit 1
+            #exit 1
       - persist_to_workspace:
           root: ~/
           paths:
