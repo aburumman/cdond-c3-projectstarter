@@ -167,7 +167,7 @@ jobs:
       - run:
           name: Install tar, gzip, awscli
           command: |
-            apt-get install tar gzip awscli ansible
+            apk add --update tar gzip awscli ansible
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
