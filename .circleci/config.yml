@@ -302,3 +302,4 @@ workflows:
       - scan-backend
       - install_tar_gzip
       - deploy-infrastructure
+      - configure-infrastructure
