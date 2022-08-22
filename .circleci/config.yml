@@ -141,7 +141,7 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             backend_instance_ip=$(aws --profile mustapha_udacity ec2 describe-instances --filters "Name=instance-state-name,Values=running" --output=json | jq -r '.Reservations[0].Instances[].NetworkInterfaces[].Association.PublicIp')
-            echo $backend_instance_ip >> inventory.txt
+            echo $backend_instance_ip >> project/.circleci/ansible/inventory.txt
             # Your code here
             #exit 1
       - persist_to_workspace:
@@ -153,8 +153,19 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: cicrcle/node:alpine
+      - image: python:3.7-alpine3.11
     steps:
+      - checkout
+      - attach_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
+      - add_ssh_keys:
+          fingerprints: ["ba:0b:b0:54:65:e2:80:dc:37:33:75:5f:f4:f4:65:ed"]
+      - run:
+          name: Install Ansible
+          command: |
+            apk add --update ansible
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
