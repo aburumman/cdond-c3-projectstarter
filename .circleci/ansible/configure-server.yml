@@ -23,6 +23,8 @@
     - apt:
         name: python3
         state: latest
+    - name: update apt
+    - apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
       # Your code here
 
   # Get the environment variables from CircleCI and add to the EC2 instance
