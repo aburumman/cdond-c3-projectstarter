@@ -163,9 +163,9 @@ jobs:
           command: |
             apk add --update ansible
       - run:
-          name: Install tar, gzip, awscli
+          name: Install tar, gzip, aws-cli
           command: |
-            apk add --update tar gzip awscli
+            apk add --update tar gzip aws-cli
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
