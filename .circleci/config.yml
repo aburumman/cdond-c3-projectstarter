@@ -124,6 +124,11 @@ jobs:
               # --stack-name "your back-end stack name with workflow id" \
               # --parameter-overrides ID="your workflow id"  
           no_output_timeout: 30m
+      - run: 
+          name: install jq
+          command: |
+            apt-get update
+            apt-get install jq
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -138,7 +143,7 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            backend_instance_ip=$(aws --profile mustapha_udacity ec2 describe-instances --filters "Name=instance-state-name,Values=running" --output=json | jq -r '.Reservations[0].Instances[].NetworkInterfaces[].Association.PublicIp')
+            backend_instance_ip=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" --output=json | jq -r '.Reservations[0].Instances[].NetworkInterfaces[].Association.PublicIp')
             echo $backend_instance_ip >> project/.circleci/ansible/inventory.txt
             # Your code here
             #exit 1
