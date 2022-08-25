@@ -98,8 +98,6 @@ jobs:
 
                 
             
-
-
   install_tar_gzip:
     docker:
       - image: cimg/base:2020.01
@@ -173,6 +171,9 @@ jobs:
       # attach workspace
       - run:
           name: run deployment
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
       - run:
           name: Install dependencies
           command: echo "Hello " #|
