@@ -124,11 +124,6 @@ jobs:
               # --stack-name "your back-end stack name with workflow id" \
               # --parameter-overrides ID="your workflow id"  
           no_output_timeout: 30m
-      - run: 
-          name: install jq
-          command: |
-            apk add --update jq
-            #apt-get install jq
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -170,7 +165,7 @@ jobs:
       - run:
           name: Install tar, gzip, awscli
           command: |
-            apk add --update tar gzip 
+            apk add --update tar gzip awscli
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
