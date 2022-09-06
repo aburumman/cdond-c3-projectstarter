@@ -215,6 +215,42 @@ jobs:
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
           no_output_timeout: 30m
+  run-migrations:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Install dependencies
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            echo aws --version
+      - run: 
+          name: Run Migrations
+          command: |
+            cd backend
+            npm install
+            npm run migrations > migrations_dump.txt
+            cat migrations_dump.txt
+      - run:
+          name: send migration info to kvdb.io
+          command: |
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            then
+              curl --insecure https://kvdb.io/W43NzaenQoXBdDhVKL2KBR/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+              echo "migration complete -------"
+            else
+              echo "no migration happened"
+            fi
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
       - run:
           name: Install dependencies
           command: echo "Hello " #|
