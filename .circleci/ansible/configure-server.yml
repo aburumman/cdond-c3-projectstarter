@@ -19,7 +19,7 @@
         timeout: 600
 
     - name: update apt
-      apt: update_cache=yes force_apt_get=yes cache_valid_time=36000
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
 
     - name: "install python for Ansible."
       apt:
