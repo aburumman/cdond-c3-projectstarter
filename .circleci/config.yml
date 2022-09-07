@@ -337,21 +337,37 @@ jobs:
                     
   deploy-backend:
     docker:
-      # Docker image here that supports Ansible
-      - image: cicrcle/node:alpine
-    steps:
-      # Checkout code from git
-      # Add ssh keys with fingerprint
-      # attach workspace
+      - image: python:3.7-alpine3.11
+   steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["ba:0b:b0:54:65:e2:80:dc:37:33:75:5f:f4:f4:65:ed"]
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
+          working_directory: /tmp
           command: |
-            # your code here
+            apk add --update ansible curl rsync openssh nodejs npm
+            ansible --version
+            pip install awscli
+            aws --version
+
       - run:
-          name: Deploy backend
+          name: Package, Deploy Backend and configure prometheus service discovery
           command: |
-            # your code here
-      # Here's where you will add some code to rollback on failure  
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
+            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
+            cd .circleci/ansible
+            echo "contents of the inventory.txt file is ------$(tail -i inventory.txt)"
+            cat inventory.txt
+            export ANSIBLE_HOST_KEY_CHECKING=False
+            ansible-playbook -i inventory.txt deploy-backend.yml
 
   smoke-test:
     docker:
@@ -433,4 +449,6 @@ workflows:
       - run-migrations:
           requires: [configure-infrastructure]
       - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
           requires: [run-migrations]
