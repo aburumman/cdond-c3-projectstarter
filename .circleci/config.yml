@@ -430,7 +430,7 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
-      - run-migrations:
+      - run-migrations
         #requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
