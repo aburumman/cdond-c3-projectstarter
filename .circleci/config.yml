@@ -338,7 +338,7 @@ jobs:
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
-   steps:
+    steps:
       - checkout
       - add_ssh_keys:
           fingerprints: ["ba:0b:b0:54:65:e2:80:dc:37:33:75:5f:f4:f4:65:ed"]
