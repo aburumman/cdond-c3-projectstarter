@@ -432,3 +432,5 @@ workflows:
           requires: [build-backend]
       - run-migrations:
           requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
