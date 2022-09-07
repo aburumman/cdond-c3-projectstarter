@@ -228,7 +228,6 @@ jobs:
       - image: python:3.7-alpine
     steps:
       - checkout
-
       - run:
           name: Install dependencies
           command: |
@@ -309,7 +308,7 @@ jobs:
       # Here's where you will add some code to rollback on failure      
 
 
-  deploy-frontend:
+  no-deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
       - image: cicrcle/node:alpine
