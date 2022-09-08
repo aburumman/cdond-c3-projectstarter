@@ -435,8 +435,8 @@ jobs:
             echo "old workflow ID is: $OLD_WORKFLOW_ID"
             curl -k https://kvdb.io/W43NzaenQoXBdDhVKL2KBR/OLD_WORKFLOW_ID -d "${OLD_WORKFLOW_ID}"           
       - run:
-           name: Update Cloudfront 
-           command:  |
+          name: Update Cloudfront 
+          command:  |
              aws cloudformation deploy \
              --template-file .circleci/files/cloudfront.yml \
              --stack-name InitialStack \
