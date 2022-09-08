@@ -385,6 +385,19 @@ jobs:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
       - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+  list-stack:
+    docker:
+      - image: python:3.7-alpine
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update tar gzip curl
+            pip install awscli
+      - run:
+          name: list my stacks
+          command: aws cloudformation list-stacks
   delete-vms:
     docker:
       - image: python:3.7-alpine
@@ -395,6 +408,9 @@ jobs:
           command: |
             apk add --update tar gzip curl
             pip install awscli
+      - run: 
+          name: list stack set 
+          command: aws cloudformation list-stacks
       - run: 
           name: delete vms
           command: |
