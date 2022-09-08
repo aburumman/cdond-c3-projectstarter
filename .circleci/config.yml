@@ -399,24 +399,37 @@ jobs:
           name: delete vms
           command: |
             aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[*].Instances[*].InstanceId" --output text
-            # aws ec2 terminate-instances --instance-ids i-0dc42af8d9d50f0ed i-03a9230937d4f6570 i-0c4c605179496bceb i-04a8c555e46dd76d0
-
+            aws ec2 terminate-instances --instance-ids i-0f764061ddf37e21d
   cloudfront-update:
     docker:
-      # Docker image here that supports AWS CLI
-      - image: cicrcle/node:alpine
+      - image: python:3.7-alpine
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            apk add --update curl
+            pip install awscli
       - run:
-          name: Update cloudfront distribution
+          name: save old workflow ID to kvdb.io
           command: |
-            # your code here
-      # Here's where you will add some code to rollback on failure  
-
+            export OLD_WORKFLOW_ID=$(aws cloudformation \
+            list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            --no-paginate --output text)
+            echo "old workflow ID is: $OLD_WORKFLOW_ID"
+            curl -k https://kvdb.io/W43NzaenQoXBdDhVKL2KBR/OLD_WORKFLOW_ID -d "${OLD_WORKFLOW_ID}"            - run:
+           name: Update Cloudfront 
+           command:  |
+             aws cloudformation deploy \
+             --template-file .circleci/files/cloudfront.yml \
+             --stack-name InitialStack \
+             --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
+             --tags project=udapeople
+                
+       - destroy-environment:
+           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+       - revert-migrations:
+         workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 cleanup:
     docker:
       # Docker image here
