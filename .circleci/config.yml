@@ -399,6 +399,7 @@ jobs:
           name: delete vms
           command: |
             aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[*].Instances[*].InstanceId" --output text
+            aws ec2 terminate-instances --instance-ids i-0dc42af8d9d50f0ed i-03a9230937d4f6570 i-0c4c605179496bceb i-04a8c555e46dd76d0
 
   cloudfront-update:
     docker:
