@@ -508,4 +508,4 @@ workflows:
           requires: [smoke-test]
       #- delete-vms
       - cloudfront-update:
-          requires: [smoke-test]
+          requires: [smoke-test-2]
