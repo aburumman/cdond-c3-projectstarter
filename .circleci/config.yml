@@ -363,6 +363,18 @@ jobs:
             else
                 return 1
             fi
+  smoke-test-2:
+    docker:
+      - image: python:3.7-alpine
+    steps:
+      - checkout:    
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update tar gzip curl
+            pip install awscli
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get backend url
           command: |
