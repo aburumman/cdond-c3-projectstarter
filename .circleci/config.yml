@@ -381,8 +381,6 @@ jobs:
              --filters "Name=tag:project,Values=udapeople" \
              --query 'Reservations[*].Instances[*].PublicIpAddress' \
              --output text)
-             #--filters "Name=tag:project,Values=udapeople" \
-             #--filters "Name=instance-state-name,Values=running" \
              export API_URL="http://${BACKEND_IP}:3030"
              echo  API URL IS "${API_URL}" --- END
              if curl "${API_URL}/api/status" | grep "ok"
