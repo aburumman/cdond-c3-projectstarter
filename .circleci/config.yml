@@ -519,5 +519,5 @@ workflows:
       #- delete-vms
       - cloudfront-update:
           requires: [smoke-test-2]
-            #- cleanup:
-            #requires: [cloudfront-update]
+      - cleanup:
+          requires: [cloudfront-update]
